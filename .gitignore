@@ -10,3 +10,6 @@ google_drive/
 # They are kept out of git because of repository size limits — see README §4.5.
 # Regenerate with: npm run assets:build
 public/maps/*.glb
+
+# scale-audit renders (regenerate with: node tools/fp-render.mjs 1.62 64 <tag>)
+tools/renders/

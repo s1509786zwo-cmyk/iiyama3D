@@ -45,6 +45,11 @@ export function renderDifficulty(root, { mapId, difficultyId, save, onBack, onSt
     });
   }
 
+  const enemyNote = el('p', {
+    class: 'lead',
+    style: { margin: '0 0 16px', fontSize: '12px', color: 'var(--dim)' },
+    text: '※ 現在のバージョンでは敵は出現しません。下記の敵に関する数値は、後から有効化したときの設定値です。',
+  });
   const grid = el('div', { class: 'diff-grid' });
 
   for (const diff of DIFFICULTIES) {
@@ -93,6 +98,7 @@ export function renderDifficulty(root, { mapId, difficultyId, save, onBack, onSt
         el('div', { class: 'sub', html: '選択したマップと条件でゲームを開始します<br>設定は自動的に保存されます' }),
       ),
       summary,
+      enemyNote,
       grid,
     ),
     el(

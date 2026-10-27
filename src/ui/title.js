@@ -23,7 +23,7 @@ export function renderTitle(root, { save, onStart, onHelp, onCredits }) {
         el('div', { class: 'rule' }),
         el('p', {
           class: 'lede',
-          text: 'Google Drive に保存された4つの3Dマップをそのまま読み込み、廃墟に置き去りにされた記録を回収して脱出する。足音を立てれば、何かが寄ってくる。',
+          text: 'Google Drive に保存された4つの3Dマップをそのまま読み込み、廃墟に置き去りにされた記録を回収して脱出する。視点の高さは全マップで同じ 1.62 m。',
         }),
         el(
           'div',

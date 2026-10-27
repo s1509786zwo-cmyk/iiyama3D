@@ -27,7 +27,7 @@ export function showHelp(root, { onClose }) {
         el('kbd', { text: 'F' }), el('span', { text: 'フラッシュライトの ON / OFF' }),
         el('kbd', { text: 'Esc' }), el('span', { text: 'ポーズメニュー' }),
       ),
-      el('p', { class: 'lead', style: { marginTop: '18px' }, text: '敵に見つかると追跡されます。距離を取るか、物陰に隠れて気配が切れるのを待ってください。' }),
+      el('p', { class: 'lead', style: { marginTop: '18px' }, text: '現在このバージョンでは敵は出現しません。マップの探索と記録の回収を楽しめます（敵は後から有効化できるよう実装を残しています）。' }),
       el('div', { class: 'actions' }, button('閉じる', { className: 'btn primary', onClick: onClose })),
     ],
     { onBackdrop: onClose },

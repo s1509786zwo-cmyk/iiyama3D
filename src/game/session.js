@@ -13,14 +13,12 @@ import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment
 import { loadMapModel, buildMapCollision, disposeModel } from '../core/assets.js';
 import { CharacterBody, NavGrid } from '../core/collision.js';
 import { Enemy } from './enemy.js';
+import { EYE_HEIGHT, FOV, PLAYER_HEIGHT, PLAYER_RADIUS, WALK_SPEED, SPRINT_SPEED } from './view.js';
 import { sfx } from '../core/audio.js';
 import { formatTime } from '../core/save.js';
 
-const EYE_HEIGHT = 1.62;
-const WALK_SPEED = 3.15;
-const SPRINT_SPEED = 5.5;
-const PLAYER_RADIUS = 0.24;
-const PLAYER_HEIGHT = 1.75;
+/** enemies are intentionally disabled for now (set true to bring them back) */
+const ENEMIES_ENABLED = false;
 
 const _v = new Vector3();
 const _w = new Vector3();
@@ -39,7 +37,7 @@ export class GameSession {
     this.onLose = onLose || (() => {});
 
     this.scene = new Scene();
-    this.camera = new PerspectiveCamera(74, 1, 0.05, 500);
+    this.camera = new PerspectiveCamera(FOV, 1, 0.05, 500);
     this.camera.rotation.order = 'YXZ';
     this.clock = null;
     this.running = false;
@@ -63,6 +61,10 @@ export class GameSession {
     this.sensitivity = save?.settings?.sensitivity ?? 1;
     this.invertY = save?.settings?.invertY ?? false;
     this.timeScale = 1;
+    this.viewBob = 0;
+    this.bobPhase = 0;
+    this.floorY = 0;
+    this.eyeAboveFloor = EYE_HEIGHT;
   }
 
   /* ---------------------------------------------------------------- */
@@ -139,6 +141,13 @@ export class GameSession {
     this.body = new CharacterBody({ bvh: this.bvh, radius: PLAYER_RADIUS, height: PLAYER_HEIGHT });
     this.body.teleport(spawn.x, spawn.y + 0.05, spawn.z);
     this.body.resolve();
+    // measure the real floor under the spawn so the eye line is exact
+    const floor = this.body.groundY(0.6);
+    if (floor !== null) {
+      this.body.position.y = floor + 0.001;
+      this.body.grounded = true;
+    }
+    this.floorY = floor ?? this.body.position.y;
     this.yaw = spawn.yaw ?? 0;
     this.pitch = 0;
     this.syncCamera();
@@ -208,6 +217,7 @@ export class GameSession {
   }
 
   setupEnemies() {
+    if (!ENEMIES_ENABLED) return;
     const spawn = this.map.spawn;
     const patrols = [...this.map.patrols].sort((a, b) => {
       const da = Math.hypot(a.x - spawn.x, a.z - spawn.z);
@@ -236,8 +246,11 @@ export class GameSession {
   /* ---------------------------------------------------------------- */
   syncCamera() {
     const p = this.body.position;
-    this.camera.position.set(p.x, p.y + EYE_HEIGHT, p.z);
+    // the feet position is kept on the floor by the controller, so this is the
+    // same eye height (1.62 m) in every map, no matter the model's scale
+    this.camera.position.set(p.x, p.y + EYE_HEIGHT + this.viewBob, p.z);
     this.camera.rotation.set(this.pitch, this.yaw, 0, 'YXZ');
+    this.eyeAboveFloor = p.y + EYE_HEIGHT + this.viewBob - this.floorY;
   }
 
   hudState() {
@@ -250,6 +263,8 @@ export class GameSession {
       time: this.elapsed,
       exitActive: this.exitActive,
       yaw: this.yaw,
+      eyeAboveFloor: this.eyeAboveFloor,
+      fov: FOV,
     };
   }
 
@@ -314,6 +329,18 @@ export class GameSession {
     const jump = keys.has('Space');
 
     this.body.update(dt, wish, { speed, jump, accel: 15 });
+
+    // keep the eye exactly 1.62 m above whatever floor is under the player
+    const floorNow = this.body.grounded ? this.body.position.y : this.body.groundY(0.5);
+    if (floorNow !== null) this.floorY = floorNow;
+
+    const moving = (move.x || move.z) && this.body.grounded;
+    if (moving) {
+      this.bobPhase += dt * (canSprint ? 11 : 7.5);
+      this.viewBob = Math.sin(this.bobPhase) * (canSprint ? 0.035 : 0.02);
+    } else {
+      this.viewBob *= Math.max(0, 1 - dt * 6);
+    }
     this.syncCamera();
 
     // footsteps
@@ -366,9 +393,11 @@ export class GameSession {
       this.exitRing.rotation.y += dt * 0.25;
     }
 
-    // ---------------- enemies ----------------
-    for (const enemy of this.enemies) {
-      enemy.update(dt, this.body.position, (a, b) => this.lineOfSight(a, b), (damage) => this.hurt(damage));
+    // ---------------- enemies (disabled for now) ----------------
+    if (ENEMIES_ENABLED) {
+      for (const enemy of this.enemies) {
+        enemy.update(dt, this.body.position, (a, b) => this.lineOfSight(a, b), (damage) => this.hurt(damage));
+      }
     }
 
     this.onHud(this.hudState());
@@ -411,6 +440,12 @@ export class GameSession {
     const spawn = this.map.spawn;
     this.body.teleport(spawn.x, spawn.y + 0.05, spawn.z);
     this.body.resolve();
+    const floor = this.body.groundY(0.6);
+    if (floor !== null) {
+      this.body.position.y = floor + 0.001;
+      this.body.grounded = true;
+      this.floorY = floor;
+    }
     this.syncCamera();
     this.onEvent('toast', '落下した ─ 開始地点に戻された', 'bad');
   }

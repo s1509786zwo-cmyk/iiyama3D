@@ -1,11 +1,12 @@
 import { el, mount } from './dom.js';
 import { formatTime } from '../core/save.js';
+import { EYE_HEIGHT } from '../game/view.js';
 
 export function createHud(root, { map, difficulty, onPause }) {
   const mapName = el('div', { class: 'mapname', text: map.name });
   const objLine = el('div', { class: 'obj', text: '' });
   const timer = el('div', { class: 'timer', text: '00:00' });
-  const diffLine = el('div', { text: `難易度 ${difficulty.name}` });
+  const diffLine = el('div', { text: `難易度 ${difficulty.name} ／ 視点 ${EYE_HEIGHT.toFixed(2)} m` });
   const hpFill = el('div', { class: 'fill', style: { width: '100%' } });
   const stFill = el('div', { class: 'fill', style: { width: '100%' } });
   const hint = el('div', { class: 'hint' });
