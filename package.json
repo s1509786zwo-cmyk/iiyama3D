@@ -1,0 +1,30 @@
+{
+  "name": "iiyama3d",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "IIYAMA 3D — first-person abandoned-scene game with maps built directly from Google Drive GLB files",
+  "scripts": {
+    "start": "node server.mjs",
+    "dev": "node server.mjs",
+    "test": "node tools/check_wiring.mjs && node tools/test_flow.mjs",
+    "test:wiring": "node tools/check_wiring.mjs",
+    "test:game": "node tools/test_flow.mjs",
+    "verify:assets": "python3 tools/verify_assets.py",
+    "assets:build": "python3 tools/build_assets.py assets/maps/models && node tools/draco.mjs assets/maps/models assets/maps/models",
+    "assets:bake": "bash tools/bake_all.sh",
+    "assets:manifest": "python3 tools/make_manifest.py"
+  },
+  "dependencies": {
+    "three": "0.180.0",
+    "three-mesh-bvh": "0.8.3"
+  },
+  "devDependencies": {
+    "@gltf-transform/core": "^4.2.1",
+    "@gltf-transform/extensions": "^4.2.1",
+    "@gltf-transform/functions": "^4.2.1",
+    "draco3d": "^1.5.7",
+    "jsdom": "^27.0.1",
+    "puppeteer-core": "^23.11.1"
+  }
+}

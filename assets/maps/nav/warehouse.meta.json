@@ -1,0 +1,41 @@
+{
+ "id": "warehouse",
+ "source": "abandoned_warehouse_-_interior_scene.glb",
+ "scale": 1.0,
+ "rotDeg": [
+  0.0,
+  0.0,
+  0.0
+ ],
+ "offset": [
+  -9.87613,
+  2.93285,
+  5.78528
+ ],
+ "spawnModel": [
+  19.7523,
+  -5.8657,
+  -11.5706
+ ],
+ "spawnWorld": [
+  0.0,
+  0.0,
+  0.0
+ ],
+ "yawDeg": 315.0,
+ "floorYModel": -2.9096,
+ "boundsWorld": [
+  [
+   -24.125,
+   -0.062,
+   -7.125
+  ],
+  [
+   9.616,
+   6.691,
+   6.359
+  ]
+ ],
+ "collisionTris": 102367,
+ "totalTris": 102367
+}

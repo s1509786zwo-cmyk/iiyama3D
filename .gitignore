@@ -1,0 +1,6 @@
+node_modules/
+# raw Google Drive downloads used during the bake (re-fetchable via the Drive connector)
+google_drive/*.glb
+# derived previews / scratch renders
+/tmp/
+*.log

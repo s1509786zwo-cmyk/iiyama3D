@@ -1,0 +1,41 @@
+{
+ "id": "city",
+ "source": "abandoned_city_street_for_games.glb",
+ "scale": 1.0,
+ "rotDeg": [
+  0.0,
+  0.0,
+  0.0
+ ],
+ "offset": [
+  2.20005,
+  0.18763,
+  -6.0883
+ ],
+ "spawnModel": [
+  -4.4001,
+  -0.3753,
+  12.1766
+ ],
+ "spawnWorld": [
+  0.0,
+  0.0,
+  0.0
+ ],
+ "yawDeg": 127.5,
+ "floorYModel": -0.0787,
+ "boundsWorld": [
+  [
+   -11.375,
+   -0.77,
+   -23.875
+  ],
+  [
+   11.382,
+   4.744,
+   4.124
+  ]
+ ],
+ "collisionTris": 15667,
+ "totalTris": 15667
+}

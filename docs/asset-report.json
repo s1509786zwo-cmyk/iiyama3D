@@ -1,0 +1,116 @@
+[
+ {
+  "map": "city_street",
+  "originalMB": 37.95,
+  "shippedMB": 31.28,
+  "triangles": [
+   15767,
+   15767
+  ],
+  "meshes": [
+   92,
+   92
+  ],
+  "materials": [
+   6,
+   6
+  ],
+  "textures": [
+   8,
+   8
+  ],
+  "resolutionsPreserved": true,
+  "pixelIdentical": "8/8",
+  "extensions": [
+   "EXT_texture_webp",
+   "KHR_draco_mesh_compression"
+  ]
+ },
+ {
+  "map": "warehouse",
+  "originalMB": 68.01,
+  "shippedMB": 18.86,
+  "triangles": [
+   993366,
+   993366
+  ],
+  "meshes": [
+   62,
+   62
+  ],
+  "materials": [
+   35,
+   35
+  ],
+  "textures": [
+   31,
+   26
+  ],
+  "resolutionsPreserved": true,
+  "pixelIdentical": "26/26",
+  "extensions": [
+   "EXT_texture_webp",
+   "KHR_draco_mesh_compression",
+   "KHR_materials_specular"
+  ]
+ },
+ {
+  "map": "subway",
+  "originalMB": 98.74,
+  "shippedMB": 41.51,
+  "triangles": [
+   1302796,
+   1302796
+  ],
+  "meshes": [
+   62,
+   62
+  ],
+  "materials": [
+   15,
+   15
+  ],
+  "textures": [
+   11,
+   11
+  ],
+  "resolutionsPreserved": true,
+  "pixelIdentical": "11/11",
+  "extensions": [
+   "EXT_texture_webp",
+   "KHR_draco_mesh_compression",
+   "KHR_materials_clearcoat",
+   "KHR_materials_emissive_strength",
+   "KHR_materials_specular",
+   "KHR_materials_transmission"
+  ]
+ },
+ {
+  "map": "classroom",
+  "originalMB": 7.62,
+  "shippedMB": 3.01,
+  "triangles": [
+   59660,
+   59660
+  ],
+  "meshes": [
+   12,
+   12
+  ],
+  "materials": [
+   11,
+   11
+  ],
+  "textures": [
+   11,
+   11
+  ],
+  "resolutionsPreserved": true,
+  "pixelIdentical": "11/11",
+  "extensions": [
+   "EXT_texture_webp",
+   "KHR_draco_mesh_compression",
+   "KHR_materials_specular"
+  ]
+ }
+]

@@ -1,0 +1,254 @@
+{
+ "version": 1,
+ "generatedBy": "tools/bake.py + tools/make_manifest.py",
+ "player": {
+  "height": 1.75,
+  "eyeHeight": 1.65,
+  "radius": 0.32,
+  "step": 0.35
+ },
+ "maps": [
+  {
+   "id": "city_street",
+   "label": "廃市街路地",
+   "sourceFile": "abandoned_city_street_for_games.glb",
+   "source": {
+    "kind": "google-drive",
+    "fileId": "1AEOP_u8YO1BkPqi9XWEvDSHaLCsw67fv",
+    "md5": "b46e261247f0e5fa0bbf31708bdd6868"
+   },
+   "model": "/assets/maps/models/abandoned_city_street_for_games.glb",
+   "collision": "/assets/maps/collision/city.collision.glb",
+   "nav": "/assets/maps/nav/city.nav.json",
+   "preview": "/assets/maps/previews/city_street.webp",
+   "previewHero": "/assets/maps/previews/city_street_hero.webp",
+   "scale": 1.0,
+   "rotationDeg": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "offset": [
+    2.20005,
+    0.18763,
+    -6.0883
+   ],
+   "spawn": {
+    "position": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "yawDeg": 127.5
+   },
+   "bounds": [
+    [
+     -11.375,
+     -0.77,
+     -23.875
+    ],
+    [
+     11.382,
+     4.744,
+     4.124
+    ]
+   ],
+   "stats": {
+    "totalTriangles": 15667,
+    "collisionTriangles": 15667
+   },
+   "player": {
+    "height": 1.75,
+    "eyeHeight": 1.65,
+    "radius": 0.32,
+    "step": 0.35
+   },
+   "notes": [
+    "モデル単位: 1 unit = 1 m (変換倍率 1.0)"
+   ],
+   "enabled": true
+  },
+  {
+   "id": "warehouse",
+   "label": "廃倉庫",
+   "sourceFile": "abandoned_warehouse_-_interior_scene.glb",
+   "source": {
+    "kind": "google-drive",
+    "fileId": "1rr0bIx6odYH71UY9RFYWKdDm-yuEjDKG",
+    "md5": "54ce2fed352be5d126b2becb2f0f7155"
+   },
+   "model": "/assets/maps/models/abandoned_warehouse_-_interior_scene.glb",
+   "collision": "/assets/maps/collision/warehouse.collision.glb",
+   "nav": "/assets/maps/nav/warehouse.nav.json",
+   "preview": "/assets/maps/previews/warehouse.webp",
+   "previewHero": "/assets/maps/previews/warehouse_hero.webp",
+   "scale": 1.0,
+   "rotationDeg": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "offset": [
+    -9.87613,
+    2.93285,
+    5.78528
+   ],
+   "spawn": {
+    "position": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "yawDeg": 315.0
+   },
+   "bounds": [
+    [
+     -24.125,
+     -0.062,
+     -7.125
+    ],
+    [
+     9.616,
+     6.691,
+     6.359
+    ]
+   ],
+   "stats": {
+    "totalTriangles": 102367,
+    "collisionTriangles": 102367
+   },
+   "player": {
+    "height": 1.75,
+    "eyeHeight": 1.65,
+    "radius": 0.32,
+    "step": 0.35
+   },
+   "notes": [
+    "モデル単位: 1 unit = 1 m (変換倍率 1.0)",
+    "元ファイルは KHR_materials_pbrSpecularGlossiness 必須。three.js が未対応のため",
+    "diffuse→baseColor / glossiness→roughness に等価変換（色・テクスチャ・UVは保持）"
+   ],
+   "enabled": true
+  },
+  {
+   "id": "subway",
+   "label": "地下鉄車内",
+   "sourceFile": "subway_train_interior.glb",
+   "source": {
+    "kind": "google-drive",
+    "fileId": "1J6cKolQ1BQngdkVajrjC2gMkf1ZfSvOo",
+    "md5": "1210f392b6efef0b3e1038b1bbeb4c70"
+   },
+   "model": "/assets/maps/models/subway_train_interior.glb",
+   "collision": "/assets/maps/collision/subway.collision.glb",
+   "nav": "/assets/maps/nav/subway.nav.json",
+   "preview": "/assets/maps/previews/subway.webp",
+   "previewHero": "/assets/maps/previews/subway_hero.webp",
+   "scale": 0.0127,
+   "rotationDeg": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "offset": [
+    0.0547,
+    -0.0508,
+    2.00724
+   ],
+   "spawn": {
+    "position": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "yawDeg": 142.5
+   },
+   "bounds": [
+    [
+     -2.625,
+     -0.984,
+     -13.375
+    ],
+    [
+     2.734,
+     3.96,
+     2.047
+    ]
+   ],
+   "stats": {
+    "totalTriangles": 85799,
+    "collisionTriangles": 85799
+   },
+   "player": {
+    "height": 1.75,
+    "eyeHeight": 1.65,
+    "radius": 0.32,
+    "step": 0.35
+   },
+   "notes": [
+    "モデル単位: 1 unit = 0.01 m (変換倍率 0.0127 で客室内寸法に一致)"
+   ],
+   "enabled": true
+  },
+  {
+   "id": "classroom",
+   "label": "廃教室",
+   "sourceFile": "abandoned_classroom.glb",
+   "source": {
+    "kind": "google-drive",
+    "fileId": "1OQCqq5p9z-Wa3ZOhq-YK7IpNJAT8PlYI",
+    "md5": "2c8071be5727eb8c0b06c188f9c8fbf2"
+   },
+   "model": "/assets/maps/models/abandoned_classroom.glb",
+   "collision": "/assets/maps/collision/classroom.collision.glb",
+   "nav": "/assets/maps/nav/classroom.nav.json",
+   "preview": "/assets/maps/previews/classroom.webp",
+   "previewHero": "/assets/maps/previews/classroom_hero.webp",
+   "scale": 0.0254,
+   "rotationDeg": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "offset": [
+    -2.84256,
+    -0.00467,
+    3.28037
+   ],
+   "spawn": {
+    "position": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "yawDeg": 352.5
+   },
+   "bounds": [
+    [
+     -2.875,
+     -0.005,
+     -7.875
+    ],
+    [
+     2.847,
+     2.901,
+     3.106
+    ]
+   ],
+   "stats": {
+    "totalTriangles": 31860,
+    "collisionTriangles": 31860
+   },
+   "player": {
+    "height": 1.75,
+    "eyeHeight": 1.65,
+    "radius": 0.32,
+    "step": 0.35
+   },
+   "notes": [
+    "モデル単位: 1 inch (変換倍率 0.0254)"
+   ],
+   "enabled": true
+  }
+ ]
+}

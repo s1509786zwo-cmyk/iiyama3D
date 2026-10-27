@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>IIYAMA 3D — ABANDONED</title>
+<link rel="stylesheet" href="/styles.css" />
+<script type="importmap">
+{
+  "imports": {
+    "three": "/vendor/three/three.module.js",
+    "three-mesh-bvh": "/vendor/three-mesh-bvh/index.module.js",
+    "three/addons/": "/vendor/three/addons/"
+  }
+}
+</script>
+</head>
+<body>
+<div id="app">
+  <canvas id="scene"></canvas>
+
+  <!-- boot / loading -->
+  <section id="screen-boot" class="screen active">
+    <div class="boot-inner">
+      <h1 class="logo">IIYAMA<span>3D</span></h1>
+      <p class="tagline">ABANDONED</p>
+      <div class="boot-status" id="boot-status">初期化中…</div>
+      <div class="bar"><i id="boot-bar"></i></div>
+    </div>
+  </section>
+
+  <!-- title -->
+  <section id="screen-title" class="screen">
+    <div class="title-inner">
+      <h1 class="logo">IIYAMA<span>3D</span></h1>
+      <p class="tagline">ABANDONED</p>
+      <div class="menu">
+        <button class="btn primary" id="btn-start">ゲームスタート</button>
+        <button class="btn" id="btn-continue">つづきから</button>
+        <button class="btn" id="btn-howto">操作方法</button>
+      </div>
+      <div class="title-foot">
+        <span id="save-info">セーブデータなし</span>
+      </div>
+    </div>
+    <div class="howto" id="howto-panel" hidden>
+      <h2>操作方法</h2>
+      <ul>
+        <li><b>W A S D</b> 移動</li>
+        <li><b>マウス</b> 視点 / <b>Shift</b> 走る / <b>Space</b> ジャンプ</li>
+        <li><b>Esc</b> ポーズ</li>
+      </ul>
+      <button class="btn" id="btn-howto-close">閉じる</button>
+    </div>
+  </section>
+
+  <!-- map select -->
+  <section id="screen-maps" class="screen">
+    <header class="screen-head">
+      <h2>マップ選択</h2>
+      <p class="sub">Google Drive から読み込んだマップ</p>
+    </header>
+    <div class="map-grid" id="map-grid"></div>
+    <footer class="screen-foot">
+      <div class="hint" id="map-hint">マップを選択してください</div>
+      <div class="row">
+        <button class="btn" id="btn-map-back">戻る</button>
+        <button class="btn primary" id="btn-map-next" disabled>次へ</button>
+      </div>
+    </footer>
+  </section>
+
+  <!-- difficulty -->
+  <section id="screen-difficulty" class="screen">
+    <header class="screen-head">
+      <h2>難易度選択</h2>
+      <p class="sub" id="difficulty-mapname"></p>
+    </header>
+    <div class="diff-grid" id="diff-grid"></div>
+    <footer class="screen-foot">
+      <div class="hint" id="diff-hint">難易度を選択してください</div>
+      <div class="row">
+        <button class="btn" id="btn-diff-back">戻る</button>
+        <button class="btn primary" id="btn-diff-start" disabled>ゲーム開始</button>
+      </div>
+    </footer>
+  </section>
+
+  <!-- gameplay overlay -->
+  <section id="hud" class="hud" hidden>
+    <div class="hud-top">
+      <div class="hud-map" id="hud-map"></div>
+      <div class="hud-diff" id="hud-diff"></div>
+    </div>
+    <div class="hud-bottom">
+      <div class="hp-wrap">
+        <div class="hp-label">HP</div>
+        <div class="hp-bar"><i id="hud-hp"></i></div>
+      </div>
+      <div class="hud-objective" id="hud-objective"></div>
+    </div>
+    <div class="crosshair" id="crosshair"></div>
+    <div class="hud-toast" id="hud-toast"></div>
+  </section>
+
+  <!-- pause -->
+  <section id="screen-pause" class="screen dark">
+    <div class="panel">
+      <h2>ポーズ</h2>
+      <div class="menu">
+        <button class="btn primary" id="btn-resume">再開</button>
+        <button class="btn" id="btn-retry-pause">リトライ</button>
+        <button class="btn" id="btn-tomaps-pause">マップ選択へ</button>
+        <button class="btn" id="btn-title-pause">タイトルへ</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- result -->
+  <section id="screen-result" class="screen dark">
+    <div class="panel">
+      <h2 id="result-title">ゲームオーバー</h2>
+      <p id="result-sub"></p>
+      <div class="menu">
+        <button class="btn primary" id="btn-result-retry">リトライ</button>
+        <button class="btn" id="btn-result-maps">マップ選択へ</button>
+        <button class="btn" id="btn-result-title">タイトルへ</button>
+      </div>
+    </div>
+  </section>
+
+  <div id="fatal" class="fatal" hidden></div>
+</div>
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>

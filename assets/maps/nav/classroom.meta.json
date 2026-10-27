@@ -1,0 +1,41 @@
+{
+ "id": "classroom",
+ "source": "abandoned_classroom.glb",
+ "scale": 0.0254,
+ "rotDeg": [
+  0.0,
+  0.0,
+  0.0
+ ],
+ "offset": [
+  -2.84256,
+  -0.00467,
+  3.28037
+ ],
+ "spawnModel": [
+  5.6851,
+  0.0093,
+  -6.5607
+ ],
+ "spawnWorld": [
+  0.0,
+  0.0,
+  0.0
+ ],
+ "yawDeg": 352.5,
+ "floorYModel": 0.0252,
+ "boundsWorld": [
+  [
+   -2.875,
+   -0.005,
+   -7.875
+  ],
+  [
+   2.847,
+   2.901,
+   3.106
+  ]
+ ],
+ "collisionTris": 31860,
+ "totalTris": 31860
+}

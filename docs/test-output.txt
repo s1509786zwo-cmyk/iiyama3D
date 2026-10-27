@@ -1,0 +1,180 @@
+   (test harness) decoded Draco for abandoned_classroom.glb: 6.4 MB
+   (test harness) decoded Draco for abandoned_warehouse_-_interior_scene.glb: 54.1 MB
+   (test harness) decoded Draco for abandoned_city_street_for_games.glb: 32.5 MB
+   (test harness) decoded Draco for subway_train_interior.glb: 71.6 MB
+
+-- boot --
+PASS  manifest lists 4 maps  — city_street,warehouse,subway,classroom
+PASS  all 4 maps report READY  — 4/4
+PASS  no map errors
+
+-- map: city_street (abandoned_city_street_for_games.glb) --
+PASS  city_street: model parsed  — 92 meshes
+PASS  city_street: triangles > 0  — 15767 tris
+PASS  city_street: materials loaded  — 6 materials, 8 textures
+PASS  city_street: textures bound  — 8 texture slots
+PASS  city_street: collision mesh  — 26289 verts / ? tris
+PASS  city_street: nav grid  — 94x114, 1471 walkable cells
+PASS  city_street: collision floor at spawn  — y=-0.000
+PASS  city_street: nav says spawn is walkable  — navFloor=0
+PASS  city_street: spawn is not inside geometry
+PASS  city_street: game started with the selected map
+PASS  city_street: enemies spawned  — 4 enemies
+PASS  city_street: player stands on the floor (no falling)  — y -0.000 -> -0.000 onGround=true
+PASS  city_street: player moves when walking  — 2.25 m in 2 s
+PASS  city_street: player still on solid ground after walking  — y=0.13
+PASS  city_street: player stands on collision geometry after walking  — floor 0.13 m vs feet 0.13 m
+PASS  city_street: cannot leave the map bounds (8 sprint directions)  — 0/8 escaped
+PASS  city_street: enemy can path to the player  — 28 waypoints
+PASS  city_street: enemy navigates toward the player  — 9.1 m -> 9.4 m
+
+-- map: warehouse (abandoned_warehouse_-_interior_scene.glb) --
+PASS  warehouse: model parsed  — 62 meshes
+PASS  warehouse: triangles > 0  — 993366 tris
+PASS  warehouse: materials loaded  — 35 materials, 26 textures
+PASS  warehouse: textures bound  — 26 texture slots
+PASS  warehouse: collision mesh  — 221660 verts / ? tris
+PASS  warehouse: nav grid  — 137x56, 6181 walkable cells
+PASS  warehouse: collision floor at spawn  — y=-0.000
+PASS  warehouse: nav says spawn is walkable  — navFloor=0
+PASS  warehouse: spawn is not inside geometry
+PASS  warehouse: game started with the selected map
+PASS  warehouse: enemies spawned  — 4 enemies
+PASS  warehouse: player stands on the floor (no falling)  — y -0.000 -> -0.000 onGround=true
+PASS  warehouse: player moves when walking  — 2.39 m in 2 s
+PASS  warehouse: player still on solid ground after walking  — y=-0.00
+PASS  warehouse: player stands on collision geometry after walking  — floor -0.00 m vs feet -0.00 m
+PASS  warehouse: cannot leave the map bounds (8 sprint directions)  — 0/8 escaped
+PASS  warehouse: enemy can path to the player  — 42 waypoints
+PASS  warehouse: enemy navigates toward the player  — 10.3 m -> 0.9 m
+
+-- map: subway (subway_train_interior.glb) --
+PASS  subway: model parsed  — 62 meshes
+PASS  subway: triangles > 0  — 1302796 tris
+PASS  subway: materials loaded  — 15 materials, 9 textures
+PASS  subway: textures bound  — 9 texture slots
+PASS  subway: collision mesh  — 85227 verts / ? tris
+PASS  subway: nav grid  — 24x64, 714 walkable cells
+PASS  subway: collision floor at spawn  — y=-0.102
+PASS  subway: nav says spawn is walkable  — navFloor=0
+PASS  subway: spawn is not inside geometry
+PASS  subway: game started with the selected map
+PASS  subway: enemies spawned  — 4 enemies
+PASS  subway: player stands on the floor (no falling)  — y 0.000 -> 0.000 onGround=true
+PASS  subway: player moves when walking  — 2.39 m in 2 s
+PASS  subway: player still on solid ground after walking  — y=0.00
+PASS  subway: player stands on collision geometry after walking  — floor 0.00 m vs feet 0.00 m
+PASS  subway: cannot leave the map bounds (8 sprint directions)  — 0/8 escaped
+PASS  subway: enemy can path to the player  — 36 waypoints
+PASS  subway: enemy navigates toward the player  — 9.5 m -> 1.3 m
+
+-- map: classroom (abandoned_classroom.glb) --
+PASS  classroom: model parsed  — 10 meshes
+PASS  classroom: triangles > 0  — 40156 tris
+PASS  classroom: materials loaded  — 10 materials, 10 textures
+PASS  classroom: textures bound  — 10 texture slots
+PASS  classroom: collision mesh  — 82547 verts / ? tris
+PASS  classroom: nav grid  — 25x46, 584 walkable cells
+PASS  classroom: collision floor at spawn  — y=-0.000
+PASS  classroom: nav says spawn is walkable  — navFloor=0
+PASS  classroom: spawn is not inside geometry
+PASS  classroom: game started with the selected map
+PASS  classroom: enemies spawned  — 4 enemies
+PASS  classroom: player stands on the floor (no falling)  — y -0.000 -> -0.000 onGround=true
+PASS  classroom: player moves when walking  — 1.98 m in 2 s
+PASS  classroom: player still on solid ground after walking  — y=0.00
+PASS  classroom: player stands on collision geometry after walking  — floor 0.00 m vs feet 0.00 m
+PASS  classroom: cannot leave the map bounds (8 sprint directions)  — 0/8 escaped
+PASS  classroom: enemy can path to the player  — 29 waypoints
+PASS  classroom: enemy navigates toward the player  — 6.8 m -> 0.2 m
+
+-- UI flow --
+PASS  map select screen active
+PASS  4 map cards rendered  — abandoned_city_street_for_games.glb | abandoned_warehouse_-_interior_scene.glb | subway_train_interior.glb | abandoned_classroom.glb
+PASS  cards show the real file names
+PASS  cards show per-map ready badges
+PASS  cards show preview images
+PASS  next button disabled before selection
+PASS  selection marks the card
+PASS  selected id stored
+PASS  next button enabled after select
+PASS  difficulty screen active
+PASS  3 difficulties rendered
+PASS  difficulty screen shows map name
+PASS  game starts on the selected map
+PASS  game screen + hud visible
+PASS  hud shows selected map file
+PASS  simulation advances  — elapsed=1.00s
+PASS  player position is on solid ground during play  — y=0.00
+PASS  damage ends the run
+PASS  save records the run  — lastMap=subway runs=1
+PASS  retry restarts the same map
+PASS  failed map refuses to start (no substitution)
+PASS  select screen shown with an error hint  — abandoned_city_street_for_games.glb を読み込めなかったため開始できません
+
+97/97 checks passed
+ALL CHECKS PASSED
+PASS  index.html has unique element ids  — 42 ids
+PASS  import map declares three
+PASS  import map declares three/addons/
+PASS  import map declares three-mesh-bvh
+PASS  import resolves: src/game/mapLibrary.js
+PASS  import resolves: src/game/enemy.js
+PASS  import resolves: src/game/nav.js
+PASS  import resolves: src/game/physics.js
+PASS  import resolves: src/game/enemy.js
+PASS  import resolves: src/game/maps.js
+PASS  import resolves: src/game/mapLibrary.js
+PASS  import resolves: src/game/world.js
+PASS  import resolves: src/game/input.js
+PASS  import resolves: src/ui/screens.js
+PASS  import resolves: src/game/save.js
+PASS  import resolves: src/game/flow.js
+PASS  import resolves: src/game/mapLibrary.js
+PASS  import resolves: src/game/flow.js
+PASS  all 27 element ids referenced by the JS exist in index.html
+PASS  bare specifier mapped: three  — /vendor/three/three.module.js
+PASS    -> file exists: /vendor/three/three.module.js
+PASS  bare specifier mapped: three/addons/loaders/GLTFLoader.js  — /vendor/three/addons/loaders/GLTFLoader.js
+PASS    -> file exists: /vendor/three/addons/loaders/GLTFLoader.js
+PASS  bare specifier mapped: three/addons/loaders/DRACOLoader.js  — /vendor/three/addons/loaders/DRACOLoader.js
+PASS    -> file exists: /vendor/three/addons/loaders/DRACOLoader.js
+PASS  bare specifier mapped: three-mesh-bvh  — /vendor/three-mesh-bvh/index.module.js
+PASS    -> file exists: /vendor/three-mesh-bvh/index.module.js
+PASS  stylesheet linked
+PASS  module entry exists  — /src/main.js
+PASS  manifest city_street.model exists  — /assets/maps/models/abandoned_city_street_for_games.glb
+PASS  manifest city_street.collision exists  — /assets/maps/collision/city.collision.glb
+PASS  manifest city_street.nav exists  — /assets/maps/nav/city.nav.json
+PASS  manifest city_street.preview exists  — /assets/maps/previews/city_street.webp
+PASS  manifest city_street.previewHero exists  — /assets/maps/previews/city_street_hero.webp
+PASS  manifest city_street nav grid dimensions  — 94x114
+PASS  manifest city_street spawn is the world origin
+PASS  manifest warehouse.model exists  — /assets/maps/models/abandoned_warehouse_-_interior_scene.glb
+PASS  manifest warehouse.collision exists  — /assets/maps/collision/warehouse.collision.glb
+PASS  manifest warehouse.nav exists  — /assets/maps/nav/warehouse.nav.json
+PASS  manifest warehouse.preview exists  — /assets/maps/previews/warehouse.webp
+PASS  manifest warehouse.previewHero exists  — /assets/maps/previews/warehouse_hero.webp
+PASS  manifest warehouse nav grid dimensions  — 137x56
+PASS  manifest warehouse spawn is the world origin
+PASS  manifest subway.model exists  — /assets/maps/models/subway_train_interior.glb
+PASS  manifest subway.collision exists  — /assets/maps/collision/subway.collision.glb
+PASS  manifest subway.nav exists  — /assets/maps/nav/subway.nav.json
+PASS  manifest subway.preview exists  — /assets/maps/previews/subway.webp
+PASS  manifest subway.previewHero exists  — /assets/maps/previews/subway_hero.webp
+PASS  manifest subway nav grid dimensions  — 24x64
+PASS  manifest subway spawn is the world origin
+PASS  manifest classroom.model exists  — /assets/maps/models/abandoned_classroom.glb
+PASS  manifest classroom.collision exists  — /assets/maps/collision/classroom.collision.glb
+PASS  manifest classroom.nav exists  — /assets/maps/nav/classroom.nav.json
+PASS  manifest classroom.preview exists  — /assets/maps/previews/classroom.webp
+PASS  manifest classroom.previewHero exists  — /assets/maps/previews/classroom_hero.webp
+PASS  manifest classroom nav grid dimensions  — 25x46
+PASS  manifest classroom spawn is the world origin
+PASS  player size unified across maps  — {"height":1.75,"eyeHeight":1.65,"radius":0.32,"step":0.35}
+PASS  player height ~1.7-1.8 m
+PASS  eye height ~1.6-1.7 m
+
+21 imports scanned, 11 source files
+
+ALL WIRING CHECKS PASSED

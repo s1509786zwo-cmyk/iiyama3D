@@ -1,0 +1,45 @@
+{
+ "note": "Google Drive から取得した原本の来歴。原本 GLB はサイズの都合でリポジトリに含めず、assets/maps/models に変換版を収録。",
+ "files": [
+  {
+   "mapId": "city_street",
+   "name": "abandoned_city_street_for_games.glb",
+   "driveFileId": "1AEOP_u8YO1BkPqi9XWEvDSHaLCsw67fv",
+   "driveMd5": "b46e261247f0e5fa0bbf31708bdd6868",
+   "driveSizeBytes": 37951716,
+   "shippedPath": "/assets/maps/models/abandoned_city_street_for_games.glb",
+   "shippedSizeBytes": 31275756,
+   "shippedSha256": "6cb2a7a543904cceff9a7d8730076af327496795dc23207957dd298e253872be"
+  },
+  {
+   "mapId": "warehouse",
+   "name": "abandoned_warehouse_-_interior_scene.glb",
+   "driveFileId": "1rr0bIx6odYH71UY9RFYWKdDm-yuEjDKG",
+   "driveMd5": "54ce2fed352be5d126b2becb2f0f7155",
+   "driveSizeBytes": 68011636,
+   "shippedPath": "/assets/maps/models/abandoned_warehouse_-_interior_scene.glb",
+   "shippedSizeBytes": 18863684,
+   "shippedSha256": "811b994fca9dc50c54ed90e223920223e194d07a722cd4b1ea575b97987e1417"
+  },
+  {
+   "mapId": "subway",
+   "name": "subway_train_interior.glb",
+   "driveFileId": "1J6cKolQ1BQngdkVajrjC2gMkf1ZfSvOo",
+   "driveMd5": "1210f392b6efef0b3e1038b1bbeb4c70",
+   "driveSizeBytes": 98738896,
+   "shippedPath": "/assets/maps/models/subway_train_interior.glb",
+   "shippedSizeBytes": 41512168,
+   "shippedSha256": "66881e47d45250e87cf05a7b12baed05f86d5e5f0dac055f7731be2ea2426826"
+  },
+  {
+   "mapId": "classroom",
+   "name": "abandoned_classroom.glb",
+   "driveFileId": "1OQCqq5p9z-Wa3ZOhq-YK7IpNJAT8PlYI",
+   "driveMd5": "2c8071be5727eb8c0b06c188f9c8fbf2",
+   "driveSizeBytes": 7621112,
+   "shippedPath": "/assets/maps/models/abandoned_classroom.glb",
+   "shippedSizeBytes": 3011300,
+   "shippedSha256": "f195ca9a311d9e2952e3233721b26e7ff57b02c6860256db1b52dfc587686fa0"
+  }
+ ]
+}
