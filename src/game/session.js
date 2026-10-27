@@ -100,7 +100,7 @@ export class GameSession {
     this.hemi = new HemisphereLight(0xaebfca, 0x141a1e, map.ambient ?? 0.5);
     this.scene.add(this.hemi);
 
-    this.ambient = new AmbientLight(0x6f8492, 0.35);
+    this.ambient = new AmbientLight(0x6f8492, 0.5);
     this.scene.add(this.ambient);
 
     this.sun = new DirectionalLight(new Color(map.sunColor || '#c8d4dc'), map.sunIntensity ?? 1.2);
@@ -111,7 +111,7 @@ export class GameSession {
     this.scene.add(this.sun.target);
 
     // flashlight — the only reliable light source inside these buildings
-    this.flashlight = new SpotLight(0xfff0d0, 26, 34, Math.PI / 7, 0.55, 1.4);
+    this.flashlight = new SpotLight(0xfff0d0, 42, 36, Math.PI / 6.5, 0.6, 1.35);
     this.flashlight.position.set(0.18, -0.12, 0.1);
     this.flashlightTarget = new Object3D();
     this.flashlightTarget.position.set(0, 0, -1);
@@ -120,7 +120,7 @@ export class GameSession {
     this.flashlight.target = this.flashlightTarget;
     this.scene.add(this.camera);
 
-    this.eyeLight = new PointLight(0x9fd0d8, 0.9, 6, 2);
+    this.eyeLight = new PointLight(0x9fd0d8, 2.4, 7, 2);
     this.camera.add(this.eyeLight);
 
     try {
