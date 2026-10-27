@@ -1,0 +1,111 @@
+{
+  "version": 1,
+  "updated": "2026-10-27",
+  "notes": "Each entry is one independent map. Add new maps by appending an entry (id, file, fileMeta, scale, spawn, preview) - the game and the map select screen are driven entirely by this file, so the roster is not limited to four.",
+  "maps": [
+    {
+      "id": "city_street",
+      "title": "廃市街",
+      "subtitle": "ABANDONED CITY STREET",
+      "fileName": "abandoned_city_street_for_games.glb",
+      "file": "maps/abandoned_city_street_for_games.glb",
+      "source": {
+        "provider": "Google Drive",
+        "fileId": "1AEOP_u8YO1BkPqi9XWEvDSHaLCsw67fv",
+        "folderId": "0ABFsEP59JS1SUk9PVA",
+        "md5": "b46e261247f0e5fa0bbf31708bdd6868",
+        "bytes": 37951716
+      },
+      "scale": 1,
+      "spawn": null,
+      "collision": {
+        "stepHeight": 0.38,
+        "eyeHeight": 1.68
+      },
+      "gameplay": {
+        "items": 4,
+        "enemies": 2
+      },
+      "preview": "maps/previews/city_street.webp",
+      "scaleNote": "Source already in metres (door ~2.0 m, building storey ~2.5 m), uniform scale 1."
+    },
+    {
+      "id": "warehouse",
+      "title": "廃倉庫",
+      "subtitle": "ABANDONED WAREHOUSE — INTERIOR",
+      "fileName": "abandoned_warehouse_-_interior_scene.glb",
+      "file": "maps/abandoned_warehouse_-_interior_scene.glb",
+      "source": {
+        "provider": "Google Drive",
+        "fileId": "1rr0bIx6odYH71UY9RFYWKdDm-yuEjDKG",
+        "folderId": "1MTHCTamNC-og_Gul1Ou0tSrU8eGumZHU",
+        "md5": "54ce2fed352be5d126b2becb2f0f7155",
+        "bytes": 68011636
+      },
+      "scale": 1,
+      "spawn": null,
+      "collision": {
+        "stepHeight": 0.45,
+        "eyeHeight": 1.68
+      },
+      "gameplay": {
+        "items": 5,
+        "enemies": 3
+      },
+      "preview": "maps/previews/warehouse.webp",
+      "scaleNote": "Source already in metres (walkway gate ~2.0 m, ceiling ~4 m), uniform scale 1."
+    },
+    {
+      "id": "subway",
+      "title": "地下鉄車内",
+      "subtitle": "SUBWAY TRAIN INTERIOR",
+      "fileName": "subway_train_interior.glb",
+      "file": "maps/subway_train_interior.glb",
+      "source": {
+        "provider": "Google Drive",
+        "fileId": "1J6cKolQ1BQngdkVajrjC2gMkf1ZfSvOo",
+        "folderId": "0ABFsEP59JS1SUk9PVA",
+        "md5": "1210f392b6efef0b3e1038b1bbeb4c70",
+        "bytes": 98738896
+      },
+      "scale": 0.01,
+      "spawn": null,
+      "collision": {
+        "stepHeight": 0.3,
+        "eyeHeight": 1.68
+      },
+      "gameplay": {
+        "items": 4,
+        "enemies": 2
+      },
+      "preview": "maps/previews/subway.webp",
+      "scaleNote": "Source authored in centimetres (carbody 4.2 x 3.9 m wide/tall, 12 m long), uniform scale 0.01."
+    },
+    {
+      "id": "classroom",
+      "title": "廃教室",
+      "subtitle": "ABANDONED CLASSROOM",
+      "fileName": "abandoned_classroom.glb",
+      "file": "maps/abandoned_classroom.glb",
+      "source": {
+        "provider": "Google Drive",
+        "fileId": "1OQCqq5p9z-Wa3ZOhq-YK7IpNJAT8PlYI",
+        "folderId": "0ABFsEP59JS1SUk9PVA",
+        "md5": "2c8071be5727eb8c0b06c188f9c8fbf2",
+        "bytes": 7621112
+      },
+      "scale": 0.0254,
+      "spawn": null,
+      "collision": {
+        "stepHeight": 0.35,
+        "eyeHeight": 1.68
+      },
+      "gameplay": {
+        "items": 4,
+        "enemies": 2
+      },
+      "preview": "maps/previews/classroom.webp",
+      "scaleNote": "Source authored in inches (imported from Collada; 114 units -> 2.9 m ceiling), uniform scale 0.0254."
+    }
+  ]
+}

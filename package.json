@@ -1,0 +1,23 @@
+{
+  "name": "iiyama3d",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "First-person survival game built on four Google Drive GLB maps",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0 --port 5173",
+    "build": "vite build",
+    "preview": "vite preview --host 0.0.0.0 --port 4173",
+    "verify": "node scripts/verify.mjs",
+    "previews": "node scripts/render-previews.mjs"
+  },
+  "dependencies": {
+    "three": "^0.169.0",
+    "three-mesh-bvh": "^0.8.3"
+  },
+  "devDependencies": {
+    "@sparticuz/chromium": "^131.0.1",
+    "playwright-core": "^1.47.2",
+    "vite": "^5.4.10"
+  }
+}

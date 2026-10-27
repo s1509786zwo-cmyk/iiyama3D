@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>map inspector (dev)</title>
+    <style>
+      html, body { margin: 0; background: #0a0f13; color: #cfe; font-family: monospace; }
+      #wrap { display: flex; flex-wrap: wrap; gap: 8px; padding: 8px; }
+      figure { margin: 0; }
+      figcaption { font-size: 11px; padding: 4px 0; color: #7ee0c8; }
+      canvas { display: block; background: #06090c; }
+    </style>
+  </head>
+  <body>
+    <div id="wrap"></div>
+    <script type="module">
+      import * as THREE from 'three';
+      import { MapAssetLoader, prepareMapScene } from '/src/core/Loader.js';
+      import { CollisionWorld } from '/src/core/CollisionWorld.js';
+
+      const params = new URLSearchParams(location.search);
+      const file = params.get('file');
+      const scale = Number(params.get('scale') || 1);
+      const W = Number(params.get('w') || 480);
+      const H = Number(params.get('h') || 300);
+
+      const loader = new MapAssetLoader();
+      const gltf = await loader.loadGLB(file);
+      const prepared = prepareMapScene(gltf, { scale });
+      const box = prepared.box;
+      const size = box.getSize(new THREE.Vector3());
+      const center = box.getCenter(new THREE.Vector3());
+
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x080c10);
+      scene.add(prepared.root);
+      scene.add(new THREE.HemisphereLight(0xdfe9ff, 0x30281e, 1.5));
+      const d1 = new THREE.DirectionalLight(0xfff0d8, 2.0);
+      d1.position.copy(center).add(new THREE.Vector3(10, 18, 8).multiplyScalar(Math.max(1, size.length() / 20)));
+      scene.add(d1);
+
+      // 1m reference grid on the lowest floor plane.
+      const gridSize = Math.max(size.x, size.z) * 1.6;
+      const grid = new THREE.GridHelper(gridSize, Math.max(2, Math.round(gridSize)), 0x2f5d55, 0x1b2d2c);
+      grid.position.set(center.x, box.min.y + 0.001, center.z);
+      scene.add(grid);
+
+      // 1.8 m human reference standing at the map centre-ish.
+      const human = new THREE.Group();
+      const body = new THREE.Mesh(
+        new THREE.CapsuleGeometry(0.22, 1.3, 4, 10),
+        new THREE.MeshBasicMaterial({ color: 0xff5a3c, wireframe: true }),
+      );
+      body.position.y = 0.9;
+      human.add(body);
+      const head = new THREE.Mesh(new THREE.SphereGeometry(0.11, 10, 8), new THREE.MeshBasicMaterial({ color: 0xff5a3c }));
+      head.position.y = 1.72;
+      human.add(head);
+      human.position.set(center.x, box.min.y, center.z);
+      scene.add(human);
+
+      const renderer = new THREE.WebGLRenderer({ antialias: true });
+      renderer.setSize(W, H, false);
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.2;
+      const wrap = document.getElementById('wrap');
+
+      const collision = new CollisionWorld(prepared.meshes);
+      const cells = collision.sampleWalkable(box, { spacing: Math.max(0.5, Math.min(size.x, size.z) / 60), minClearanceLoose: 0.9, wallProbe: 0.6 });
+      const openCells = cells.filter((c) => c.open);
+      const pool = openCells.length ? openCells : cells;
+      let best = pool[0];
+      let bestScore = -Infinity;
+      for (const c of pool) {
+        const d = Math.hypot(c.x - center.x, c.z - center.z);
+        const sc = Math.min(c.clearance, 6) * 1.4 - d * 0.35;
+        if (sc > bestScore) { bestScore = sc; best = c; }
+      }
+      const person = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.3, 0.02, 16), new THREE.MeshBasicMaterial({ color: 0x7ee0c8 }));
+      person.position.set(best.x, best.y + 0.03, best.z);
+      scene.add(person);
+
+      const camera = new THREE.PerspectiveCamera(48, W / H, Math.max(0.01, size.length() / 8000), size.length() * 8);
+      const views = {
+        '3/4 aerial': [0.75, 0.65, 0.9],
+        'top': [0.001, 1, 0.001],
+        'side': [1, 0.18, 0.02],
+        'front': [0.02, 0.18, 1],
+        'eye level': [0.9, 0.055, 0.9],
+      };
+      const radius = size.length() * 0.5;
+      for (const [label, dirArr] of Object.entries(views)) {
+        const dir = new THREE.Vector3(...dirArr).normalize();
+        let dist;
+        if (label === 'eye level') {
+          camera.position.set(best.x, best.y + 1.65, best.z);
+          camera.lookAt(center.x, best.y + 1.5, center.z);
+          camera.fov = 78; camera.updateProjectionMatrix();
+          const fwd = new THREE.Vector3(center.x - best.x, 0, center.z - best.z).normalize();
+          human.position.set(best.x + fwd.x * 2.6, best.y, best.z + fwd.z * 2.6);
+          human.visible = true;
+        } else {
+          human.visible = false;
+          dist = radius / Math.sin(THREE.MathUtils.degToRad(24));
+          camera.position.copy(center).addScaledVector(dir, dist);
+          camera.lookAt(center);
+        }
+        camera.updateProjectionMatrix();
+        renderer.render(scene, camera);
+        const fig = document.createElement('figure');
+        const cap = document.createElement('figcaption');
+        cap.textContent = `${label}`;
+        const c = document.createElement('canvas');
+        c.width = W; c.height = H;
+        c.getContext('2d').drawImage(renderer.domElement, 0, 0);
+        fig.appendChild(cap); fig.appendChild(c);
+        wrap.appendChild(fig);
+      }
+
+      // metrics
+      const cl = cells.map((c) => c.clearance).sort((a, b) => a - b);
+      const q = (p) => (cl.length ? cl[Math.floor((cl.length - 1) * p)] : 0);
+      window.__INSPECT__ = {
+        file, scale,
+        size: size.toArray(),
+        box: { min: box.min.toArray(), max: box.max.toArray() },
+        stats: prepared.stats.triangles,
+        cells: cells.length,
+        openCells: openCells.length,
+        clearance: { p10: q(0.1), p50: q(0.5), p90: q(0.9), max: cl[cl.length - 1] },
+        bestSpawn: [best.x, best.y, best.z, best.clearance],
+        yawToCenter: Math.atan2(-(center.x - best.x), -(center.z - best.z)),
+      };
+      document.title = 'ready';
+    </script>
+  </body>
+</html>
