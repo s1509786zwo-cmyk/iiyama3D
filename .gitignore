@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.DS_Store
+*.log
+
+# staging area for the original GLBs downloaded from Google Drive
+google_drive/
+
+# The converted map assets (115.8 MB) live here for the running game.
+# They are kept out of git because of repository size limits — see README §4.5.
+# Regenerate with: npm run assets:build
+public/maps/*.glb

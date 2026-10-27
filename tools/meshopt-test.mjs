@@ -1,0 +1,11 @@
+import { NodeIO } from '@gltf-transform/core';
+import { ALL_EXTENSIONS } from '@gltf-transform/extensions';
+import { meshopt, dedup, prune } from '@gltf-transform/functions';
+import { MeshoptEncoder } from 'meshoptimizer';
+await MeshoptEncoder.ready;
+const io = new NodeIO().registerExtensions(ALL_EXTENSIONS).registerDependencies({ 'meshopt.encoder': MeshoptEncoder });
+const doc = await io.read(process.argv[2]);
+const before = (await io.writeBinary(doc)).byteLength;
+await doc.transform(dedup(), prune(), meshopt({ encoder: MeshoptEncoder, level: 'medium' }));
+const after = (await io.writeBinary(doc)).byteLength;
+console.log(`${process.argv[2].split('/').pop()}  ${(before/1e6).toFixed(1)}MB -> ${(after/1e6).toFixed(1)}MB (${(100*after/before).toFixed(1)}%)`);

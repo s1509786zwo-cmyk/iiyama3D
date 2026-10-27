@@ -1,0 +1,94 @@
+[
+  {
+    "id": "city_street",
+    "file": "abandoned_city_street_for_games.glb",
+    "out": "city_street.glb",
+    "srcBytes": 37951716,
+    "outBytes": 31769204,
+    "ratio": 0.837,
+    "stats": {
+      "nodes": 181,
+      "meshes": 92,
+      "prims": 92,
+      "tris": 15767,
+      "materials": 6,
+      "textures": 8
+    },
+    "geometryBitIdentical": true,
+    "reparseMatches": true,
+    "texturesPixelIdentical": true,
+    "textureBytesSaved": 4815173,
+    "texturesKeptAsIs": 3,
+    "webpTexturesPatched": 5,
+    "sha256": "801325840ce8423779803734584f0c715d67616c73c1f22cd69874e43c13a4a7"
+  },
+  {
+    "id": "warehouse",
+    "file": "abandoned_warehouse_-_interior_scene.glb",
+    "out": "warehouse.glb",
+    "srcBytes": 68011636,
+    "outBytes": 31778388,
+    "ratio": 0.467,
+    "stats": {
+      "nodes": 108,
+      "meshes": 62,
+      "prims": 62,
+      "tris": 993366,
+      "materials": 35,
+      "textures": 31
+    },
+    "geometryBitIdentical": false,
+    "reparseMatches": true,
+    "texturesPixelIdentical": false,
+    "textureBytesSaved": 15619429,
+    "texturesKeptAsIs": 9,
+    "webpTexturesPatched": 25,
+    "sha256": "071687ce9e49d3d24fd049aeeb4c4db4c87edd0fc696207632c69e299d801ffb"
+  },
+  {
+    "id": "subway",
+    "file": "subway_train_interior.glb",
+    "out": "subway.glb",
+    "srcBytes": 98738896,
+    "outBytes": 48177900,
+    "ratio": 0.488,
+    "stats": {
+      "nodes": 134,
+      "meshes": 62,
+      "prims": 62,
+      "tris": 1302796,
+      "materials": 15,
+      "textures": 11
+    },
+    "geometryBitIdentical": true,
+    "reparseMatches": true,
+    "texturesPixelIdentical": true,
+    "textureBytesSaved": 18435577,
+    "texturesKeptAsIs": 2,
+    "webpTexturesPatched": 9,
+    "sha256": "4b809ed95e124b2d682a0282a848d776da77654b12583917e267afa3c537535d"
+  },
+  {
+    "id": "classroom",
+    "file": "abandoned_classroom.glb",
+    "out": "classroom.glb",
+    "srcBytes": 7621112,
+    "outBytes": 4110388,
+    "ratio": 0.539,
+    "stats": {
+      "nodes": 17,
+      "meshes": 12,
+      "prims": 12,
+      "tris": 59661.333333333336,
+      "materials": 11,
+      "textures": 11
+    },
+    "geometryBitIdentical": true,
+    "reparseMatches": true,
+    "texturesPixelIdentical": true,
+    "textureBytesSaved": 676993,
+    "texturesKeptAsIs": 3,
+    "webpTexturesPatched": 8,
+    "sha256": "71c3769176e2b31d9baef5f82fbdf354152481e9b4a6cac307b4368c5ce24c11"
+  }
+]

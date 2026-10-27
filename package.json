@@ -1,0 +1,30 @@
+{
+  "name": "iiyama3d",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "IIYAMA 3D - first person survival game with maps imported from Google Drive",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "assets:build": "node tools/build-assets.mjs",
+    "assets:verify": "node tools/verify-assets.mjs",
+    "maps:bake": "node --max-old-space-size=4096 tools/bake.mjs",
+    "test": "node tests/controller.test.mjs && node --max-old-space-size=6144 tests/maps.test.mjs && node --max-old-space-size=6144 tests/runtime-pipeline.test.mjs",
+    "validate": "node tools/validate-glb.mjs public/maps/city_street.glb public/maps/warehouse.glb public/maps/subway.glb public/maps/classroom.glb"
+  },
+  "dependencies": {
+    "three": "^0.186.1",
+    "three-mesh-bvh": "^0.9.16"
+  },
+  "devDependencies": {
+    "@gltf-transform/core": "^4.5.1",
+    "@gltf-transform/extensions": "^4.5.1",
+    "@gltf-transform/functions": "^4.5.1",
+    "gltf-validator": "^2.0.0-dev.3.10",
+    "meshoptimizer": "^1.3.0",
+    "sharp": "^0.35.5",
+    "vite": "^8.3.5"
+  }
+}
