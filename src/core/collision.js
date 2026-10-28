@@ -85,9 +85,25 @@ export class CharacterBody {
   }
 
   /**
+   * True when there is floor under (x, z) at roughly the player's level.
+   * Used by the ledge guard so the player can never walk off the end of a model
+   * (the subway car ends abruptly, for instance) and fall into the void — that
+   * fall/respawn loop was causing violent screen shake.
+   */
+  hasFloorAt(x, z, maxDrop = 0.34) {
+    _p.set(x, this.position.y + 0.14, z);
+    const reach = 0.14 + maxDrop;
+    const hit = this.bvh.closestPointToPoint(_p, _hit, 0, reach);
+    if (!hit || hit.distance > reach) return false;
+    // a floor is something at (or just below) the feet, not a wall at eye level
+    if (hit.point.y > this.position.y + 0.05) return false;
+    return this.position.y - hit.point.y <= maxDrop;
+  }
+
+  /**
    * @param {number} dt seconds
    * @param {Vector3} wish normalised wish direction on the XZ plane
-   * @param {{speed:number, jump?:boolean, accel?:number, fly?:boolean}} opts
+   * @param {{speed:number, jump?:boolean, accel?:number, fly?:boolean, ledgeGuard?:boolean}} opts
    */
   update(dt, wish, opts = {}) {
     const speed = opts.speed ?? 3.1;
@@ -107,10 +123,35 @@ export class CharacterBody {
     const startZ = this.position.z;
     const wantX = this.velocity.x * dt;
     const wantZ = this.velocity.z * dt;
+    const ledgeGuard = opts.ledgeGuard !== false && this.grounded;
 
     this.position.x += wantX;
     this.position.z += wantZ;
     this.resolve();
+
+    // --- ledge guard: refuse to walk off an edge, slide along it instead ---
+    if (ledgeGuard && !this.hasFloorAt(this.position.x, this.position.z)) {
+      // try sliding on each axis independently
+      this.position.x = startX + wantX;
+      this.position.z = startZ;
+      this.resolve();
+      if (this.hasFloorAt(this.position.x, this.position.z)) {
+        this.velocity.z = 0;
+      } else {
+        this.position.x = startX;
+        this.position.z = startZ + wantZ;
+        this.resolve();
+        if (this.hasFloorAt(this.position.x, this.position.z)) {
+          this.velocity.x = 0;
+        } else {
+          this.position.x = startX;
+          this.position.z = startZ;
+          this.resolve();
+          this.velocity.x = 0;
+          this.velocity.z = 0;
+        }
+      }
+    }
 
     // --- step up over small obstacles (kerbs, rubble, stair treads) ---
     const wantLen = Math.hypot(wantX, wantZ);

@@ -12,9 +12,14 @@
 import baked from './baked.json';
 
 /**
- * How each scale was calibrated (measured with tools/measure.mjs + tools/floor-planes.mjs):
- *  - city_street : authored in metres already.  Floor plane at y=-0.05, doorway
- *                  lintels ~1.95 m, building tops 2.6–5.5 m  -> 1.0 unit = 1 m.
+ * How each scale was calibrated (measured with tools/city-scale.mjs,
+ * tools/anthropometrics.mjs and tools/furniture-audit.mjs):
+ *  - city_street : the model is a stylised diorama, not 1 unit = 1 m.  Its
+ *                  skyline is only 5.5 units tall and storeys are 2.55 units, so
+ *                  at x1.0 the player was 38 % of the tallest building, which
+ *                  reads as a giant in a toy street.  At x1.75 the skyline is
+ *                  9.6 m (three storeys), the open street ~11 m wide and the
+ *                  player is 18 % of the skyline -> normal proportions.
  *  - warehouse   : authored in metres.  Floor y=-2.95, ceiling y=+3.35
  *                  (= 6.3 m clear height, correct for an industrial hall)  -> 1.0.
  *  - subway      : authored in centimetres.  Floor y=4 -> ceiling y=291
@@ -23,7 +28,7 @@ import baked from './baked.json';
  *                  = 113.4 in = 2.88 m (desk tops land at ~30 in = 0.76 m) -> 0.0254.
  */
 export const MAP_CALIBRATION = {
-  city_street: { unit: 1.0, unitName: 'metre', reference: '扉上部 1.95 / 建物 2.6–5.5 (m相当)' },
+  city_street: { unit: 1.75, unitName: 'diorama unit', reference: '建物頂部 5.5u → 9.6m / 街路巾 約11m（×1.75で人物比 18%）' },
   warehouse: { unit: 1.0, unitName: 'metre', reference: '床 -2.95 → 天井 +3.35 (6.3m)' },
   subway: { unit: 0.01, unitName: 'centimetre', reference: '床 4 → 天井 291 (287cm=2.87m)' },
   classroom: { unit: 0.0254, unitName: 'inch', reference: '床 0.3 → 天井 113.7 (113.4in=2.88m)' },

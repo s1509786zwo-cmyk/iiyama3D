@@ -48,7 +48,7 @@ export function renderDifficulty(root, { mapId, difficultyId, save, onBack, onSt
   const enemyNote = el('p', {
     class: 'lead',
     style: { margin: '0 0 16px', fontSize: '12px', color: 'var(--dim)' },
-    text: '※ 現在のバージョンでは敵は出現しません。下記の敵に関する数値は、後から有効化したときの設定値です。',
+    text: '※ 現在はマップ探索モードです（敵・記録回収・脱出はありません）。下記は後から有効化したときの設定値です。',
   });
   const grid = el('div', { class: 'diff-grid' });
 

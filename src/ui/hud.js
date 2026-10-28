@@ -2,12 +2,16 @@ import { el, mount } from './dom.js';
 import { formatTime } from '../core/save.js';
 import { EYE_HEIGHT } from '../game/view.js';
 
+/**
+ * Exploration HUD: map name, elapsed time, sprint stamina and the eye height
+ * (so the player can see the viewpoint is identical on every map).
+ * No objective counters — the game is free exploration now.
+ */
 export function createHud(root, { map, difficulty, onPause }) {
   const mapName = el('div', { class: 'mapname', text: map.name });
-  const objLine = el('div', { class: 'obj', text: '' });
+  const mapLine = el('div', { text: `広さ ${map.sizeLabel}` });
   const timer = el('div', { class: 'timer', text: '00:00' });
-  const diffLine = el('div', { text: `難易度 ${difficulty.name} ／ 視点 ${EYE_HEIGHT.toFixed(2)} m` });
-  const hpFill = el('div', { class: 'fill', style: { width: '100%' } });
+  const eyeLine = el('div', { text: `視点 ${EYE_HEIGHT.toFixed(2)} m` });
   const stFill = el('div', { class: 'fill', style: { width: '100%' } });
   const hint = el('div', { class: 'hint' });
   const damage = el('div', { class: 'damage' });
@@ -21,21 +25,15 @@ export function createHud(root, { map, difficulty, onPause }) {
   const hud = el(
     'div',
     { class: 'hud' },
-    el('div', { class: 'top-left' }, mapName, objLine),
-    el('div', { class: 'top-right' }, timer, diffLine),
+    el('div', { class: 'top-left' }, mapName, mapLine),
+    el('div', { class: 'top-right' }, timer, eyeLine),
     el(
       'div',
       { class: 'bottom-left' },
       el(
         'div',
-        { class: 'meter hp' },
-        el('div', { class: 'lbl', text: 'HEALTH' }),
-        el('div', { class: 'shell' }, hpFill),
-      ),
-      el(
-        'div',
         { class: 'meter st' },
-        el('div', { class: 'lbl', text: 'STAMINA' }),
+        el('div', { class: 'lbl', text: 'SPRINT' }),
         el('div', { class: 'shell' }, stFill),
       ),
     ),
@@ -57,19 +55,6 @@ export function createHud(root, { map, difficulty, onPause }) {
     if (time !== last.time) {
       timer.textContent = time;
       last.time = time;
-    }
-    const obj = state.exitActive
-      ? '▶ 脱出地点へ戻れ'
-      : `記録 ${state.collected} / ${state.total}`;
-    if (obj !== last.obj) {
-      objLine.textContent = obj;
-      objLine.classList.toggle('done', state.exitActive);
-      last.obj = obj;
-    }
-    const hp = Math.max(0, Math.round((state.health / state.maxHealth) * 100));
-    if (hp !== last.hp) {
-      hpFill.style.width = `${hp}%`;
-      last.hp = hp;
     }
     const st = Math.max(0, Math.round(state.stamina * 100));
     if (st !== last.st) {

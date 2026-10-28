@@ -4,12 +4,33 @@ import { MeshBVH } from 'three-mesh-bvh';
 import { Ray, Vector3, DoubleSide, BackSide } from 'three';
 import fs from 'node:fs';
 
+/**
+ * Unit calibration for the street map.
+ *
+ * Measured with tools/city-scale.mjs: the model tops out at 5.51 units and its
+ * facade storeys are ~2.55 units apart. At 1 unit = 1 m that makes the tallest
+ * building 5.5 m, i.e. a 1.75 m player is 38 % of the skyline — which reads as a
+ * giant in a toy street (this is what the user reported).
+ *
+ * At 1.75 the skyline becomes ~9.6 m (three storeys), storeys 4.5 m and the
+ * open street ~11 m wide, so a 1.75 m player is 18 % of the skyline — a normal
+ * adult in a city street. Only this map is rescaled; the other three already
+ * measure correctly (see tools/anthropometrics.mjs).
+ */
+const CITY_SCALE = process.env.CITY_SCALE ? Number(process.env.CITY_SCALE) : 1.75;
 const MAPS = [
-  { id: 'city_street', file: 'abandoned_city_street_for_games.glb', scale: 1.0 },
+  { id: 'city_street', file: 'abandoned_city_street_for_games.glb', scale: CITY_SCALE },
   { id: 'warehouse', file: 'abandoned_warehouse_-_interior_scene.glb', scale: 1.0 },
   { id: 'subway', file: 'subway_train_interior.glb', scale: 0.01 },
   { id: 'classroom', file: 'abandoned_classroom.glb', scale: 0.0254 },
 ];
+
+const OUT_FILES = {
+  city_street: 'city_street.glb',
+  warehouse: 'warehouse.glb',
+  subway: 'subway.glb',
+  classroom: 'classroom.glb',
+};
 
 const CELL = 0.35;
 const PLAYER_R = 0.24;
@@ -18,7 +39,8 @@ const STEP = 0.45;
 
 const out = {};
 for (const map of MAPS) {
-  const geo = await loadMerged('google_drive/' + map.file, map.scale);
+  const src = fs.existsSync('google_drive/' + map.file) ? 'google_drive/' + map.file : 'public/maps/' + OUT_FILES[map.id];
+  const geo = await loadMerged(src, map.scale);
   const bvh = new MeshBVH(geo, { maxLeafSize: 10 });
   const box = geo.boundingBox;
   const size = box.getSize(new Vector3());

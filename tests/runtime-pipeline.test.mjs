@@ -104,9 +104,9 @@ for (const [id, file] of MAPS) {
 
   // enemy navigation uses the same BVH + baked grid
   const nav = new NavGrid(data.grid);
-  const target = data.objectives[0];
+  const target = data.patrols[0];
   const path = nav.findPath(body.position, target);
-  check(id, 'enemy path to first objective exists', path.length > 0, `${path.length} waypoints`);
+  check(id, 'enemy path to first patrol node exists', path.length > 0, `${path.length} waypoints`);
 
   if (path.length) {
     const enemy = new CharacterBody({ bvh, radius: 0.24, height: 1.75 });

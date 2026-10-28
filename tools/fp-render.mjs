@@ -23,12 +23,14 @@ const REF_H = 1.75;        // player height
 const REF_W = 0.46;        // shoulder width
 const REF_D = 0.24;        // body depth
 
+const ONLY = process.env.ONLY_MAP || '';
+const SCALE_OVERRIDE = process.env.SCALE_OVERRIDE ? Number(process.env.SCALE_OVERRIDE) : null;
 const MAPS = [
   ['city_street', 'public/maps/city_street.glb'],
   ['warehouse', 'public/maps/warehouse.glb'],
   ['subway', 'public/maps/subway.glb'],
   ['classroom', 'public/maps/classroom.glb'],
-];
+].filter(([id]) => !ONLY || id === ONLY);
 
 fs.mkdirSync('tools/renders', { recursive: true });
 
@@ -56,6 +58,12 @@ function rayBox(origin, dir, min, max) {
 for (const [id, file] of MAPS) {
   const data = baked[id];
   const geo = await loadMerged(file, data.scale);
+  if (SCALE_OVERRIDE !== null && data.scale !== 0) {
+    // re-scale the already-scaled geometry by the ratio
+    const r = SCALE_OVERRIDE / data.scale;
+    geo.scale(r, r, r);
+    geo.computeBoundingBox();
+  }
   const bvh = new MeshBVH(geo, { targetLeafSize: 10 });
   const spawn = data.spawn;
   const eye = new Vector3(spawn.x, spawn.y + EYE, spawn.z);

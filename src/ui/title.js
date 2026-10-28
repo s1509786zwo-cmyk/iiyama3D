@@ -23,7 +23,7 @@ export function renderTitle(root, { save, onStart, onHelp, onCredits }) {
         el('div', { class: 'rule' }),
         el('p', {
           class: 'lede',
-          text: 'Google Drive に保存された4つの3Dマップをそのまま読み込み、廃墟に置き去りにされた記録を回収して脱出する。視点の高さは全マップで同じ 1.62 m。',
+          text: 'Google Drive に保存された4つの3Dマップをそのまま読み込み、自由に歩き回って構造を確かめる探索モード。視点の高さは全マップで同じ 1.62 m。',
         }),
         el(
           'div',
@@ -50,14 +50,14 @@ export function renderTitle(root, { save, onStart, onHelp, onCredits }) {
             ),
           ),
         ),
-        el('h3', { text: 'Records' }),
+        el('h3', { text: 'Played' }),
         el(
           'div',
           { class: 'spec' },
           ...bestTimes.map(({ map, best }) =>
             el('div', {}, `${map.short}  `, el('b', { text: formatTime(best) })),
           ),
-          el('div', { style: { marginTop: '10px' } }, '脱出 ', el('b', { text: `${save.stats.escapes}` }), ' / 挑戦 ', el('b', { text: `${save.stats.plays}` })),
+          el('div', { style: { marginTop: '10px' } }, 'プレイ回数 ', el('b', { text: `${save.stats.plays}` })),
         ),
       ),
     ),

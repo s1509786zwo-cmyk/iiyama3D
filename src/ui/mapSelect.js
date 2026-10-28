@@ -93,7 +93,7 @@ export function renderMapSelect(root, { selectedId, onBack, onNext }) {
     grid,
     el('div', {
       class: 'footnote',
-      text: '※ 初回はモデルの取得・解析・プレビュー生成のため時間がかかります。2回目以降はキャッシュから即座に表示されます。',
+      text: '※ 初回はモデルの取得・解析・プレビュー生成のため時間がかかります。2回目以降はキャッシュから即座に表示されます。／ 現在はマップ探索モードです（記録回収・脱出・敵はありません）。',
     }),
   );
 
@@ -141,7 +141,7 @@ export function renderMapSelect(root, { selectedId, onBack, onNext }) {
           { class: 'meta' },
           el('span', { text: map.sizeLabel }),
           el('span', { text: `縮尺 ×${map.scale}` }),
-          el('span', { text: `記録 ${map.objectives.length}` }),
+          el('span', { text: `広さ ${map.sizeLabel}` }),
         ),
       ),
       badge,

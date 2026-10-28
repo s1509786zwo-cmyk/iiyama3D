@@ -1,7 +1,7 @@
 import './style.css';
 import { WebGLRenderer, SRGBColorSpace, ACESFilmicToneMapping } from 'three';
 import { MAPS, DIFFICULTIES } from './maps/mapData.js';
-import { loadSave, commitRun } from './core/save.js';
+import { loadSave } from './core/save.js';
 import { Input } from './core/input.js';
 import { resumeAudio, setVolume, sfx } from './core/audio.js';
 import { GameSession } from './game/session.js';
@@ -9,7 +9,7 @@ import { renderTitle } from './ui/title.js';
 import { renderMapSelect } from './ui/mapSelect.js';
 import { renderDifficulty } from './ui/difficulty.js';
 import { createHud } from './ui/hud.js';
-import { showHelp, showCredits, showPause, showResult, showLoading, panelOverlay } from './ui/overlays.js';
+import { showHelp, showCredits, showPause, showLoading, panelOverlay } from './ui/overlays.js';
 import { el, button } from './ui/dom.js';
 
 const canvas = document.getElementById('game-canvas');
@@ -194,8 +194,6 @@ async function startGame(map, difficulty) {
         if (type === 'toast') toast(payload, kind);
         else if (type === 'damage') state.hud?.flashDamage();
       },
-      onWin: (stats) => finishRun(session, stats),
-      onLose: (stats) => finishRun(session, stats),
     });
 
     await session.load({
@@ -232,7 +230,7 @@ async function startGame(map, difficulty) {
   session.startLoop();
   state.hud.update(session.hudState());
   state.hud.setLocked(false);
-  state.hud.showHint(`記録を ${session.fragments.length} 個回収し、開始地点から脱出せよ`, 6200);
+  state.hud.showHint('WASD で移動 / マウスで視点 / Shift でダッシュ / F でライト', 6200);
   state.starting = false;
 
   // click anywhere on the lock overlay to grab the pointer
@@ -244,33 +242,6 @@ async function startGame(map, difficulty) {
     input.requestLock();
   });
 
-}
-
-function finishRun(session, stats) {
-  const { record, isBest } = commitRun(save, {
-    mapId: stats.mapId,
-    difficultyId: stats.difficultyId,
-    escaped: stats.escaped,
-    time: stats.time,
-    fragments: stats.fragments,
-  });
-  input.releaseLock();
-  state.hud?.setLocked(false);
-  state.hud?.setVisible(false);
-  clearOverlay();
-  setOverlay(showResult(ui, {
-    stats,
-    record,
-    isBest,
-    map: MAPS.find((m) => m.id === stats.mapId),
-    difficulty: DIFFICULTIES.find((d) => d.id === stats.difficultyId) || DIFFICULTIES[1],
-    onRetry: () => startGame(
-      MAPS.find((m) => m.id === stats.mapId),
-      DIFFICULTIES.find((d) => d.id === stats.difficultyId) || DIFFICULTIES[1],
-    ),
-    onMapSelect: showMapSelect,
-    onTitle: showTitle,
-  }));
 }
 
 function pauseGame() {

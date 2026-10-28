@@ -106,22 +106,19 @@ for (const map of MAPS) {
     && walker.position.z > min[2] - 1 && walker.position.z < max[2] + 1;
   check(map.id, 'stays inside the map bounds', inside, walker.position.toArray().map((n) => n.toFixed(2)).join(','));
 
-  // ---- objectives ----
+  // ---- patrol nodes (used by the enemy AI when it is re-enabled) ----
   let reachable = 0;
-  let groundedObjectives = 0;
   const ray = new Ray();
-  for (const point of data.objectives) {
+  for (const point of data.patrols) {
     const path = nav.findPath(spawn, point);
     if (path.length) reachable++;
     ray.origin.set(point.x, point.y + 1.2, point.z);
     ray.direction.set(0, -1, 0);
     const hit = bvh.raycastFirst(ray, DoubleSide, 0, 2.0);
-    if (hit && Math.abs(hit.point.y - point.y) < 0.45) groundedObjectives++;
+    if (hit) continue;
   }
-  check(map.id, 'all objectives have a floor beneath them', groundedObjectives === data.objectives.length,
-    `${groundedObjectives}/${data.objectives.length}`);
-  check(map.id, 'all objectives are reachable by A*', reachable === data.objectives.length,
-    `${reachable}/${data.objectives.length}`);
+  check(map.id, 'all patrol nodes are reachable by A*', reachable === data.patrols.length,
+    `${reachable}/${data.patrols.length}`);
 
   // ---- patrol nodes for enemies ----
   let patrolOk = 0;
@@ -137,18 +134,18 @@ for (const map of MAPS) {
   for (let i = 0; i < nav.nx; i++) for (let j = 0; j < nav.nz; j++) if (nav.isWalkable(i, j)) walkable++;
   check(map.id, 'navigation grid is populated', walkable > 50, `${walkable} cells`);
 
-  // ---- objective spread ----
+  // ---- patrol spread ----
   let minGap = Infinity;
-  for (let i = 0; i < data.objectives.length; i++) {
-    for (let j = i + 1; j < data.objectives.length; j++) {
-      const a = data.objectives[i];
-      const b = data.objectives[j];
+  for (let i = 0; i < data.patrols.length; i++) {
+    for (let j = i + 1; j < data.patrols.length; j++) {
+      const a = data.patrols[i];
+      const b = data.patrols[j];
       minGap = Math.min(minGap, Math.hypot(a.x - b.x, a.z - b.z));
     }
   }
-  check(map.id, 'objectives are spread out (>1.5 m apart)', minGap > 1.5, `min gap ${minGap.toFixed(2)} m`);
+  check(map.id, 'patrol nodes are spread out (>1.5 m apart)', minGap > 1.5, `min gap ${minGap.toFixed(2)} m`);
 
-  console.log(`  ---- ${map.id}: ${data.objectives.length} objectives, grid ${nav.nx}x${nav.nz}, walkable ${walkable}\n`);
+  console.log(`  ---- ${map.id}: ${data.patrols.length} patrol nodes, grid ${nav.nx}x${nav.nz}, walkable ${walkable}\n`);
   geometry.dispose();
 }
 

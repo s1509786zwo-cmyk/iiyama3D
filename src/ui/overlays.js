@@ -1,5 +1,4 @@
 import { el, mount, button, clear } from './dom.js';
-import { formatTime } from '../core/save.js';
 import { MAPS } from '../maps/mapData.js';
 
 export function panelOverlay(content, { onBackdrop } = {}) {
@@ -16,7 +15,7 @@ export function showHelp(root, { onClose }) {
   const overlay = panelOverlay(
     [
       el('h2', { text: '操作方法' }),
-      el('p', { class: 'lead', text: '一人称視点の探索ゲームです。記録をすべて回収すると、開始地点が脱出地点として起動します。' }),
+      el('p', { class: 'lead', text: '一人称視点の探索モードです。マップ内を自由に歩き、構造やスケールを確かめられます。' }),
       el(
         'div',
         { class: 'keys' },
@@ -27,7 +26,7 @@ export function showHelp(root, { onClose }) {
         el('kbd', { text: 'F' }), el('span', { text: 'フラッシュライトの ON / OFF' }),
         el('kbd', { text: 'Esc' }), el('span', { text: 'ポーズメニュー' }),
       ),
-      el('p', { class: 'lead', style: { marginTop: '18px' }, text: '現在このバージョンでは敵は出現しません。マップの探索と記録の回収を楽しめます（敵は後から有効化できるよう実装を残しています）。' }),
+      el('p', { class: 'lead', style: { marginTop: '18px' }, text: '現在このバージョンでは敵は出現せず、記録回収や脱出の目標もありません（実装は残してあるので後から有効化できます）。' }),
       el('div', { class: 'actions' }, button('閉じる', { className: 'btn primary', onClick: onClose })),
     ],
     { onBackdrop: onClose },
@@ -78,33 +77,6 @@ export function showPause(root, { onResume, onRetry, onMapSelect, onTitle, map, 
       button('再開する', { className: 'btn primary', key: 'Esc', onClick: onResume }),
       button('このマップをやり直す', { className: 'btn', onClick: onRetry }),
       button('マップ選択へ戻る', { className: 'btn ghost', onClick: onMapSelect }),
-      button('タイトルへ戻る', { className: 'btn ghost', onClick: onTitle }),
-    ),
-  ]);
-  mount(root, overlay);
-  return overlay;
-}
-
-export function showResult(root, { stats, record, isBest, onRetry, onMapSelect, onTitle, map, difficulty }) {
-  const title = stats.escaped ? '脱出成功' : '任務失敗';
-  const overlay = panelOverlay([
-    el('div', { class: `result-badge${stats.escaped ? '' : ' fail'}`, text: stats.escaped ? 'ESCAPED' : 'FAILED' }),
-    el('h2', { text: title }),
-    el('p', { class: 'lead', text: `${map.name} ─ 難易度 ${difficulty.name}` }),
-    el(
-      'div',
-      { class: 'stat-grid' },
-      el('div', { class: 'k', text: 'クリアタイム' }), el('div', { class: 'v', text: formatTime(stats.time) }),
-      el('div', { class: 'k', text: '回収した記録' }), el('div', { class: 'v', text: `${stats.fragments} / ${stats.total}` }),
-      el('div', { class: 'k', text: 'このマップのベスト' }), el('div', { class: `v${isBest ? ' best' : ''}`, text: formatTime(record?.bestTime) }),
-      el('div', { class: 'k', text: '脱出回数' }), el('div', { class: 'v', text: `${record?.escapes ?? 0}` }),
-    ),
-    isBest && stats.escaped ? el('p', { class: 'lead', style: { color: 'var(--accent)' }, text: 'ベストタイムを更新しました。' }) : null,
-    el(
-      'div',
-      { class: 'actions' },
-      button(stats.escaped ? 'もう一度このマップへ' : 'リトライ', { className: 'btn primary', onClick: onRetry }),
-      button('マップ選択へ戻る', { class: 'btn', onClick: onMapSelect }),
       button('タイトルへ戻る', { className: 'btn ghost', onClick: onTitle }),
     ),
   ]);

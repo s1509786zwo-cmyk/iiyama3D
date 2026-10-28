@@ -1,13 +1,11 @@
 /**
  * A single playthrough on one map.
- * Owns the three.js scene, the player, enemies, objectives and the game loop.
+ * Owns the three.js scene, the player and the game loop (exploration mode).
  */
 import {
   Scene, PerspectiveCamera, Color, Fog, HemisphereLight, DirectionalLight,
-  AmbientLight, SpotLight, SpotLightHelper, Object3D, Vector3, Mesh,
-  OctahedronGeometry, RingGeometry, TorusGeometry, MeshBasicMaterial,
-  MeshStandardMaterial, PointLight, Group, AdditiveBlending, DoubleSide,
-  PMREMGenerator,
+  AmbientLight, SpotLight, Object3D, Vector3, PointLight, PMREMGenerator,
+  Group,
 } from 'three';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { loadMapModel, buildMapCollision, disposeModel } from '../core/assets.js';
@@ -48,12 +46,10 @@ export class GameSession {
     this.model = null;
     this.collision = null;
     this.enemies = [];
-    this.fragments = [];
-    this.collected = 0;
+
     this.health = difficulty.health;
     this.maxHealth = difficulty.health;
     this.stamina = 1;
-    this.exitActive = false;
     this.exitPulse = 0;
     this.stepTimer = 0;
     this.yaw = 0;
@@ -61,10 +57,11 @@ export class GameSession {
     this.sensitivity = save?.settings?.sensitivity ?? 1;
     this.invertY = save?.settings?.invertY ?? false;
     this.timeScale = 1;
-    this.viewBob = 0;
-    this.bobPhase = 0;
     this.floorY = 0;
     this.eyeAboveFloor = EYE_HEIGHT;
+    this.lastRespawn = -99;
+    this.safePosition = null;
+    this.airborneFrames = 0;
   }
 
   /* ---------------------------------------------------------------- */
@@ -87,8 +84,6 @@ export class GameSession {
 
     this.setupWorld();
     this.setupPlayer();
-    this.setupFragments();
-    this.setupExit();
     this.setupEnemies();
     this.onHud(this.hudState());
     onStage?.('ready');
@@ -153,69 +148,6 @@ export class GameSession {
     this.syncCamera();
   }
 
-  setupFragments() {
-    const geo = new OctahedronGeometry(0.15, 0);
-    const ringGeo = new RingGeometry(0.28, 0.38, 24);
-    this.map.objectives.forEach((point, i) => {
-      const group = new Group();
-      group.position.set(point.x, point.y + 0.9, point.z);
-
-      const core = new Mesh(geo, new MeshStandardMaterial({
-        color: 0xffd18a, emissive: new Color(0xffa63d), emissiveIntensity: 2.4,
-        metalness: 0.3, roughness: 0.25,
-      }));
-      group.add(core);
-
-      const halo = new Mesh(geo, new MeshBasicMaterial({
-        color: 0xffc06a, transparent: true, opacity: 0.24,
-        blending: AdditiveBlending, depthWrite: false,
-      }));
-      halo.scale.setScalar(2.1);
-      group.add(halo);
-
-      const light = new PointLight(0xffb255, 2.2, 4.2, 2);
-      group.add(light);
-
-      const ring = new Mesh(ringGeo, new MeshBasicMaterial({
-        color: 0xffb455, transparent: true, opacity: 0.5, side: DoubleSide,
-        blending: AdditiveBlending, depthWrite: false,
-      }));
-      ring.rotation.x = -Math.PI / 2;
-      ring.position.set(point.x, point.y + 0.03, point.z);
-      this.scene.add(ring);
-
-      this.scene.add(group);
-      this.fragments.push({ group, ring, core, halo, light, point, index: i, taken: false, phase: i * 1.7 });
-    });
-  }
-
-  setupExit() {
-    const spawn = this.map.spawn;
-    this.exitGroup = new Group();
-    this.exitGroup.position.set(spawn.x, spawn.y + 1.1, spawn.z);
-
-    this.exitRing = new Mesh(
-      new TorusGeometry(0.85, 0.045, 8, 40),
-      new MeshStandardMaterial({
-        color: 0x4fe0c0, emissive: new Color(0x2fd0ae), emissiveIntensity: 1.2,
-        transparent: true, opacity: 0.55, roughness: 0.4,
-      }),
-    );
-    this.exitGroup.add(this.exitRing);
-
-    this.exitGlow = new Mesh(
-      new RingGeometry(0.5, 0.95, 32),
-      new MeshBasicMaterial({
-        color: 0x4fe0c0, transparent: true, opacity: 0.12,
-        side: DoubleSide, blending: AdditiveBlending, depthWrite: false,
-      }),
-    );
-    this.exitGlow.rotation.x = -Math.PI / 2;
-    this.exitGlow.position.y = -1.05;
-    this.exitGroup.add(this.exitGlow);
-    this.scene.add(this.exitGroup);
-  }
-
   setupEnemies() {
     if (!ENEMIES_ENABLED) return;
     const spawn = this.map.spawn;
@@ -248,20 +180,15 @@ export class GameSession {
     const p = this.body.position;
     // the feet position is kept on the floor by the controller, so this is the
     // same eye height (1.62 m) in every map, no matter the model's scale
-    this.camera.position.set(p.x, p.y + EYE_HEIGHT + this.viewBob, p.z);
+    this.camera.position.set(p.x, p.y + EYE_HEIGHT, p.z);
     this.camera.rotation.set(this.pitch, this.yaw, 0, 'YXZ');
-    this.eyeAboveFloor = p.y + EYE_HEIGHT + this.viewBob - this.floorY;
+    this.eyeAboveFloor = p.y + EYE_HEIGHT - this.floorY;
   }
 
   hudState() {
     return {
-      health: this.health,
-      maxHealth: this.maxHealth,
       stamina: this.stamina,
-      collected: this.collected,
-      total: this.fragments.length,
       time: this.elapsed,
-      exitActive: this.exitActive,
       yaw: this.yaw,
       eyeAboveFloor: this.eyeAboveFloor,
       fov: FOV,
@@ -330,18 +257,30 @@ export class GameSession {
 
     this.body.update(dt, wish, { speed, jump, accel: 15 });
 
-    // keep the eye exactly 1.62 m above whatever floor is under the player
+    // keep the eye exactly 1.62 m above whatever floor is under the player.
+    // No head bob: it made the view wobble and caused motion sickness.
     const floorNow = this.body.grounded ? this.body.position.y : this.body.groundY(0.5);
     if (floorNow !== null) this.floorY = floorNow;
-
-    const moving = (move.x || move.z) && this.body.grounded;
-    if (moving) {
-      this.bobPhase += dt * (canSprint ? 11 : 7.5);
-      this.viewBob = Math.sin(this.bobPhase) * (canSprint ? 0.035 : 0.02);
-    } else {
-      this.viewBob *= Math.max(0, 1 - dt * 6);
-    }
     this.syncCamera();
+
+    // ---- safety net: never keep falling into the void ----
+    // Snap back to the last place the player actually stood. This makes an
+    // accidental ledge/void fall impossible, which also removes the
+    // fall -> respawn loop that caused screen shake.
+    const p = this.body.position;
+    if (this.body.grounded) {
+      this.safePosition = { x: p.x, y: p.y, z: p.z };
+      this.airborneFrames = 0;
+    } else if (this.safePosition && !jump) {
+      this.airborneFrames += 1;
+      if (this.airborneFrames > 6 && p.y < this.safePosition.y - 0.7) {
+        this.body.teleport(this.safePosition.x, this.safePosition.y + 0.01, this.safePosition.z);
+        this.body.velocity.set(0, 0, 0);
+        this.body.resolve();
+        this.syncCamera();
+        this.airborneFrames = 0;
+      }
+    }
 
     // footsteps
     if (this.body.grounded && (move.x || move.z)) {
@@ -352,45 +291,11 @@ export class GameSession {
       }
     }
 
-    // fell out of the map -> respawn safely
-    if (this.body.position.y < this.map.baseY - 9) {
-      this.respawn();
-    }
-
-    // ---------------- objectives ----------------
-    for (const fragment of this.fragments) {
-      if (fragment.taken) continue;
-      fragment.phase += dt;
-      fragment.group.rotation.y += dt * 1.5;
-      fragment.group.position.y = fragment.point.y + 0.9 + Math.sin(fragment.phase * 1.8) * 0.09;
-      fragment.halo.scale.setScalar(2.1 + Math.sin(fragment.phase * 2.4) * 0.16);
-      fragment.ring.material.opacity = 0.32 + Math.sin(fragment.phase * 2.2) * 0.12;
-
-      const distance = Math.hypot(
-        this.body.position.x - fragment.point.x,
-        this.body.position.z - fragment.point.z,
-      );
-      if (distance < 1.25 && Math.abs(this.body.position.y - fragment.point.y) < 2) {
-        this.collectFragment(fragment);
-      }
-    }
-
-    // ---------------- exit ----------------
-    if (this.exitActive) {
-      this.exitPulse += dt;
-      this.exitRing.rotation.y += dt * 0.7;
-      const pulse = 1 + Math.sin(this.exitPulse * 2.2) * 0.05;
-      this.exitRing.scale.setScalar(pulse);
-      this.exitRing.material.opacity = 0.5 + Math.sin(this.exitPulse * 2.2) * 0.15;
-      const d = Math.hypot(
-        this.body.position.x - this.map.spawn.x,
-        this.body.position.z - this.map.spawn.z,
-      );
-      if (d < 1.35 && Math.abs(this.body.position.y - this.map.spawn.y) < 2.4) {
-        this.finish(true);
-      }
-    } else {
-      this.exitRing.rotation.y += dt * 0.25;
+    // Falling out of the world is now prevented by the ledge guard; this is only
+    // a last-resort recovery and it is debounced so it can never loop per frame.
+    if (this.body.position.y < this.map.baseY - 4 && this.elapsed - this.lastRespawn > 1.5) {
+      this.lastRespawn = this.elapsed;
+      this.recover();
     }
 
     // ---------------- enemies (disabled for now) ----------------
@@ -407,38 +312,19 @@ export class GameSession {
     return this.body.lineOfSight(a, b, 0.06);
   }
 
-  collectFragment(fragment) {
-    fragment.taken = true;
-    this.collected += 1;
-    this.scene.remove(fragment.group);
-    this.scene.remove(fragment.ring);
-    sfx.pickup();
-    this.onEvent('toast', `記録を回収した（${this.collected}/${this.fragments.length}）`);
-    if (this.collected >= this.fragments.length) {
-      this.exitActive = true;
-      this.exitRing.material.opacity = 0.75;
-      this.exitGlow.material.opacity = 0.34;
-      this.onEvent('toast', 'すべて回収した ─ 脱出地点へ戻れ', 'warn');
-      sfx.escape();
-    }
-    this.onHud(this.hudState());
-  }
-
+  /** reserved for when enemies are re-enabled */
   hurt(amount) {
     if (this.finished) return;
-    this.health -= amount;
+    this.health = Math.max(0, this.health - amount);
     sfx.damage();
     this.onEvent('damage', amount);
     this.onHud(this.hudState());
-    if (this.health <= 0) {
-      this.health = 0;
-      this.finish(false);
-    }
   }
 
-  respawn() {
+  recover() {
     const spawn = this.map.spawn;
     this.body.teleport(spawn.x, spawn.y + 0.05, spawn.z);
+    this.body.velocity.set(0, 0, 0);
     this.body.resolve();
     const floor = this.body.groundY(0.6);
     if (floor !== null) {
@@ -447,25 +333,7 @@ export class GameSession {
       this.floorY = floor;
     }
     this.syncCamera();
-    this.onEvent('toast', '落下した ─ 開始地点に戻された', 'bad');
-  }
-
-  finish(escaped) {
-    if (this.finished) return;
-    this.finished = true;
-    const stats = {
-      escaped,
-      time: this.elapsed,
-      fragments: this.collected,
-      total: this.fragments.length,
-      mapId: this.map.id,
-      difficultyId: this.difficulty.id,
-      timeLabel: formatTime(this.elapsed),
-    };
-    if (escaped) sfx.escape();
-    else sfx.fail();
-    if (escaped) this.onWin(stats);
-    else this.onLose(stats);
+    this.onEvent('toast', '開始地点に戻されました', 'bad');
   }
 
   setPaused(value) {
@@ -493,11 +361,6 @@ export class GameSession {
     if (this.raf) cancelAnimationFrame(this.raf);
     for (const enemy of this.enemies) enemy.dispose(this.scene);
     this.enemies.length = 0;
-    for (const fragment of this.fragments) {
-      this.scene.remove(fragment.group);
-      this.scene.remove(fragment.ring);
-    }
-    this.fragments.length = 0;
     if (this.model) {
       this.scene.remove(this.model);
       disposeModel(this.model);

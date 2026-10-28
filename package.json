@@ -11,7 +11,7 @@
     "assets:build": "node tools/build-assets.mjs",
     "assets:verify": "node tools/verify-assets.mjs",
     "maps:bake": "node --max-old-space-size=4096 tools/bake.mjs",
-    "test": "node tests/controller.test.mjs && node --max-old-space-size=6144 tests/maps.test.mjs && node --max-old-space-size=6144 tests/view.test.mjs && node --max-old-space-size=6144 tests/runtime-pipeline.test.mjs",
+    "test": "node tests/controller.test.mjs && node --max-old-space-size=6144 tests/maps.test.mjs && node --max-old-space-size=6144 tests/view.test.mjs && node --max-old-space-size=6144 tests/stability.test.mjs && node --max-old-space-size=6144 tests/runtime-pipeline.test.mjs",
     "validate": "node tools/validate-glb.mjs public/maps/city_street.glb public/maps/warehouse.glb public/maps/subway.glb public/maps/classroom.glb"
   },
   "dependencies": {
